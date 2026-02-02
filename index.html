@@ -248,6 +248,8 @@
                         class="px-6 py-2 rounded-lg font-bold text-sm transition bg-white text-indigo-600 shadow-sm">Performance</button>
                     <button id="nav-analysis"
                         class="px-6 py-2 rounded-lg font-bold text-sm transition text-slate-500 hover:text-slate-700">Analysis</button>
+                    <button id="nav-compare"
+                        class="px-6 py-2 rounded-lg font-bold text-sm transition text-slate-500 hover:text-slate-700">Compare</button>
                 </nav>
                 <button id="export-btn"
                     class="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition font-semibold text-xs whitespace-nowrap">
@@ -611,6 +613,87 @@
                 </div>
             </section>
         </div>
+
+        <!-- Compare Page (Page 3) -->
+        <div id="page-compare" class="space-y-8 animate-in fade-in duration-700 hidden">
+            <!-- Filters Toolbar Page 3 -->
+            <section
+                class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Opened
+                        From</label>
+                    <input type="date" id="date-start-p3"
+                        class="w-full bg-slate-50 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Opened
+                        To</label>
+                    <input type="date" id="date-end-p3"
+                        class="w-full bg-slate-50 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none">
+                </div>
+            </section>
+
+            <!-- Row 1: Monthly Location Comparison Chart -->
+            <section class="card p-6">
+                <h2 class="text-lg font-bold text-slate-800 mb-6 flex items-center">
+                    <span class="w-2 h-6 bg-indigo-500 rounded mr-3"></span>
+                    Monthly Location Analysis (Trend)
+                </h2>
+                <div class="overflow-x-auto">
+                    <div id="monthly-chart-container-p3" class="w-full h-[400px]">
+                        <svg id="chart-monthly-p3" class="w-full h-full"></svg>
+                    </div>
+                </div>
+                <div id="monthly-legend-p3" class="flex flex-wrap gap-2 justify-center mt-6 border-t pt-4"></div>
+            </section>
+
+            <!-- Row 2: Trend Analysis Group -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <!-- Location Trend Comparison (Chart 2) -->
+                <section class="card overflow-hidden xl:col-span-2">
+                    <div class="px-6 py-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                        <h2 class="text-lg font-bold text-slate-800">Location Trend Comparison</h2>
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-full">MONTHLY
+                            TREND</span>
+                    </div>
+                    <div class="data-table-container overflow-auto max-h-[400px]">
+                        <div id="comparison-table-wrapper-p3">
+                            <!-- Table will be injected here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Top 10 Worsened Trending -->
+                <section class="card overflow-hidden xl:col-span-1">
+                    <div class="px-6 py-4 bg-rose-50 border-b border-rose-100 flex items-center justify-between">
+                        <h2 class="text-lg font-bold text-rose-700 flex items-center">
+                            <span class="mr-2 text-xl">🚨</span> Top10
+                        </h2>
+                    </div>
+                    <div id="top10-trend-container-p3" class="p-6 space-y-4 max-h-[400px] overflow-y-auto bg-white">
+                        <!-- Top 10 list will be injected here -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Row 3: Category Comparison Grid (Chart 3) -->
+            <section class="card overflow-hidden">
+                <div class="px-6 py-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center">
+                        <span class="w-2 h-6 bg-emerald-500 rounded mr-3"></span>
+                        Category Analysis (2 Months Compare)
+                    </h2>
+                    <span
+                        class="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full uppercase text-[10px]">Condensed
+                        Grid</span>
+                </div>
+                <div class="data-table-container overflow-auto max-h-[500px]">
+                    <div id="category-grid-wrapper-p3" class="min-w-full">
+                        <!-- Grid will be injected here -->
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 
     <script>
@@ -624,6 +707,7 @@
         let rawData = [];
         let filteredData = [];
         let filteredDataP2 = [];
+        let filteredDataP3 = [];
         let allCategories = [];
         let currentPage = 'performance';
         const delimiter = ';';
@@ -680,6 +764,7 @@
                 'sla-bar-exceeded', 'sla-bar-met',
                 'date-start', 'date-end', 'location-filter', 'category-filter', 'sla-filter',
                 'date-start-p2', 'date-end-p2', 'location-filter-p2', 'category-filter-p2', 'plate-filter-p2',
+                'date-start-p3', 'date-end-p3',
                 'sort-filter', 'sort-filter-p2'
             ];
             ids.forEach(id => {
@@ -821,32 +906,44 @@
 
         const navPerf = document.getElementById('nav-performance');
         const navAnalysis = document.getElementById('nav-analysis');
+        const navCompare = document.getElementById('nav-compare');
 
         navPerf.addEventListener('click', () => switchPage('performance'));
         navAnalysis.addEventListener('click', () => switchPage('analysis'));
+        navCompare.addEventListener('click', () => switchPage('compare'));
         document.getElementById('export-btn').addEventListener('click', exportData);
 
         function switchPage(page) {
             currentPage = page;
             const pPerf = document.getElementById('page-performance');
             const pAnalysis = document.getElementById('page-analysis');
+            const pCompare = document.getElementById('page-compare');
+            const navs = [navPerf, navAnalysis, navCompare];
+
+            // Reset all nav buttons
+            navs.forEach(n => {
+                n.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+                n.classList.add('text-slate-500');
+            });
+
+            // Hide all pages
+            [pPerf, pAnalysis, pCompare].forEach(p => p.classList.add('hidden'));
 
             if (page === 'performance') {
                 pPerf.classList.remove('hidden');
-                pAnalysis.classList.add('hidden');
                 navPerf.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
                 navPerf.classList.remove('text-slate-500');
-                navAnalysis.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
-                navAnalysis.classList.add('text-slate-500');
                 updateDashboard(true);
-            } else {
-                pPerf.classList.add('hidden');
+            } else if (page === 'analysis') {
                 pAnalysis.classList.remove('hidden');
                 navAnalysis.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
                 navAnalysis.classList.remove('text-slate-500');
-                navPerf.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
-                navPerf.classList.add('text-slate-500');
                 updateDashboardP2(true);
+            } else if (page === 'compare') {
+                pCompare.classList.remove('hidden');
+                navCompare.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+                navCompare.classList.remove('text-slate-500');
+                updateDashboardP3(true);
             }
         }
 
@@ -855,10 +952,12 @@
             document.getElementById('landing-page').classList.remove('hidden');
             document.getElementById('page-performance').classList.add('hidden');
             document.getElementById('page-analysis').classList.add('hidden');
+            document.getElementById('page-compare').classList.add('hidden');
             switchPage('performance');
             rawData = [];
             filteredData = [];
             filteredDataP2 = [];
+            filteredDataP3 = [];
             dashboardFileInput.value = '';
         });
 
@@ -977,10 +1076,14 @@
                 document.getElementById('date-end').value = iso(maxDate);
                 document.getElementById('date-start-p2').value = iso(minDate);
                 document.getElementById('date-end-p2').value = iso(maxDate);
+                document.getElementById('date-start-p3').value = iso(minDate);
+                document.getElementById('date-end-p3').value = iso(maxDate);
             }
 
             document.querySelectorAll('#page-performance input, #page-performance select').forEach(el => el.onchange = () => updateDashboard());
             document.querySelectorAll('#page-analysis input, #page-analysis select').forEach(el => el.onchange = () => updateDashboardP2());
+            document.querySelectorAll('#page-compare input, #page-compare select').forEach(el => el.onchange = () => updateDashboardP3());
+
             updateDashboard();
         }
 
@@ -1032,6 +1135,346 @@
             renderLocationTreemapP2();
             renderPlateStackedBarP2();
             renderTableP2();
+        }
+
+        function applyFiltersP3() {
+            const startDateStr = elements['date-start-p3'].value;
+            const endDateStr = elements['date-end-p3'].value;
+
+            const start = startDateStr ? new Date(startDateStr) : null;
+            const end = endDateStr ? new Date(endDateStr) : null;
+            if (end) end.setHours(23, 59, 59);
+
+            // Base comparison data
+            filteredDataP3 = rawData.filter(d => {
+                const dateMatch = (!start || d.opening_date >= start) && (!end || d.opening_date <= end);
+                return dateMatch;
+            });
+        }
+
+        function updateDashboardP3(force = false) {
+            if (!force && currentPage !== 'compare') return;
+            applyFiltersP3();
+            renderLocationMonthlyBarChartP3();
+            renderComparisonTableP3();
+            renderTop10TrendP3();
+            renderCategoryComparisonGridP3();
+        }
+
+        const locationColorScale = d3.scaleOrdinal(d3.schemeTableau10);
+        const getLocationColor = (loc) => locationColorScale(loc);
+        const getPastelColor = (color) => {
+            const hsl = d3.hsl(color);
+            hsl.s = 0.3; // Lower saturation
+            hsl.l = 0.95; // High lightness for pastel
+            return hsl.toString();
+        };
+
+        function renderLocationMonthlyBarChartP3() {
+            const svg = d3.select("#chart-monthly-p3");
+            const legend = d3.select("#monthly-legend-p3");
+            svg.selectAll("*").remove();
+            legend.selectAll("*").remove();
+            if (!filteredDataP3.length) return;
+
+            const monthFormat = d3.timeFormat("%Y-%m");
+            const grouped = d3.rollup(filteredDataP3,
+                v => d3.rollup(v, g => g.length, d => d.Category || "Other"),
+                d => d.location,
+                d => monthFormat(d.opening_date)
+            );
+
+            const locations = Array.from(grouped.keys()).sort();
+            const months = [...new Set(filteredDataP3.map(d => monthFormat(d.opening_date)))].sort();
+            const categories = allCategories;
+
+            const data = [];
+            locations.forEach(loc => {
+                const monthMap = grouped.get(loc);
+                months.forEach(m => {
+                    const catMap = monthMap.get(m) || new Map();
+                    const row = { location: loc, month: m, label: `${loc} (${m})` };
+                    let total = 0;
+                    categories.forEach(cat => {
+                        const val = catMap.get(cat) || 0;
+                        row[cat] = val;
+                        total += val;
+                    });
+                    row._total = total;
+                    data.push(row);
+                });
+            });
+
+            const margin = { top: 40, right: 30, bottom: 120, left: 60 };
+            const width = document.getElementById("monthly-chart-container-p3").clientWidth - margin.left - margin.right;
+            const height = 400 - margin.top - margin.bottom;
+
+            const g = svg.attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+                .append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+            const x0 = d3.scaleBand().domain(data.map(d => d.label)).rangeRound([0, width]).paddingInner(0.2);
+            const y = d3.scaleLinear().domain([0, d3.max(data, d => d._total) * 1.1 || 10]).rangeRound([height, 0]);
+
+            const stack = d3.stack().keys(categories);
+            const layers = stack(data);
+
+            g.append("g").attr("class", "grid").attr("transform", `translate(0,${height})`).call(d3.axisBottom(x0).tickSize(-height).tickFormat(""));
+            g.append("g").attr("class", "axis-line axis-text").attr("transform", `translate(0,${height})`).call(d3.axisBottom(x0))
+                .selectAll("text")
+                .attr("transform", "rotate(-90)")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .style("text-anchor", "end")
+                .attr("class", "font-bold text-slate-500");
+
+            g.append("g").attr("class", "axis-line axis-text").call(d3.axisLeft(y).ticks(5));
+
+            const layer = g.selectAll(".layer")
+                .data(layers)
+                .enter().append("g")
+                .attr("fill", d => getCategoryColor(d.key));
+
+            layer.selectAll("rect")
+                .data(d => d)
+                .enter().append("rect")
+                .attr("x", d => x0(d.data.label))
+                .attr("y", d => y(d[1]))
+                .attr("height", d => y(d[0]) - y(d[1]))
+                .attr("width", x0.bandwidth())
+                .attr("rx", 2)
+                .on("mouseover", function (event, d) {
+                    const key = d3.select(this.parentNode).datum().key;
+                    tooltip.transition().duration(100).style("opacity", 1);
+                    tooltip.html(`<strong>${d.data.location} (${d.data.month})</strong><br>${key}: ${d[1] - d[0]} tickets`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                    d3.select(this).attr("opacity", 0.8);
+                })
+                .on("mouseout", function () {
+                    tooltip.transition().duration(200).style("opacity", 0);
+                    d3.select(this).attr("opacity", 1);
+                });
+
+            // Total count labels on top
+            g.selectAll(".total-label")
+                .data(data)
+                .enter().append("text")
+                .attr("x", d => x0(d.label) + x0.bandwidth() / 2)
+                .attr("y", d => y(d._total) - 5)
+                .attr("text-anchor", "middle")
+                .attr("class", "font-black text-[10px] text-slate-600")
+                .text(d => d._total > 0 ? d._total : "");
+
+            categories.forEach(cat => {
+                const item = legend.append("div").attr("class", "legend-item");
+                item.append("div").attr("class", "legend-box").style("background-color", getCategoryColor(cat));
+                item.append("span").text(cat);
+            });
+        }
+
+        function renderComparisonTableP3() {
+            const container = document.getElementById('comparison-table-wrapper-p3');
+            container.innerHTML = '';
+            if (!filteredDataP3.length) return;
+
+            const monthFormat = d3.timeFormat("%Y-%m");
+            const grouped = d3.rollup(filteredDataP3,
+                v => d3.rollup(v, g => g.length, d => monthFormat(d.opening_date)),
+                d => d.location
+            );
+
+            const months = [...new Set(filteredDataP3.map(d => monthFormat(d.opening_date)))].sort();
+            const locations = Array.from(grouped.keys()).sort();
+
+            if (months.length < 1) return;
+
+            let tableHtml = `<table class="w-full text-left text-sm border-collapse">
+                <thead class="sticky top-0 bg-slate-50 z-20 border-b-2 border-slate-200">
+                    <tr>
+                        <th class="px-6 py-4 text-slate-500 font-bold">Location</th>
+                        ${months.map(m => `<th class="px-6 py-4 text-slate-500 font-bold text-center">${m}</th>`).join('')}
+                        <th class="px-6 py-4 text-slate-500 font-bold text-center">Trend</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">`;
+
+            locations.forEach(loc => {
+                const mCounts = grouped.get(loc);
+                const color = getLocationColor(loc);
+                const bgColor = getPastelColor(color);
+
+                tableHtml += `<tr style="background-color: ${bgColor}">
+                    <td class="px-6 py-4 font-bold text-slate-700">${loc}</td>`;
+
+                months.forEach(m => {
+                    tableHtml += `<td class="px-6 py-4 text-center font-bold text-slate-600">${mCounts.get(m) || 0}</td>`;
+                });
+
+                // Result logic: compare last two months
+                let result = '-';
+                if (months.length >= 2) {
+                    const last = mCounts.get(months[months.length - 1]) || 0;
+                    const prev = mCounts.get(months[months.length - 2]) || 0;
+                    if (last < prev) {
+                        result = '<span class="text-emerald-600 flex items-center justify-center gap-1 font-bold">ดีขึ้น ↓</span>';
+                    } else if (last > prev) {
+                        result = '<span class="text-rose-600 flex items-center justify-center gap-1 font-bold">แย่ลง ↑</span>';
+                    } else {
+                        result = '<span class="text-slate-400 font-bold">-</span>';
+                    }
+                }
+
+                tableHtml += `<td class="px-6 py-4 text-center">${result}</td></tr>`;
+            });
+
+            tableHtml += `</tbody></table>`;
+            container.innerHTML = tableHtml;
+        }
+
+        function renderTop10TrendP3() {
+            const container = document.getElementById('top10-trend-container-p3');
+            container.innerHTML = '';
+            if (!filteredDataP3.length) return;
+
+            const monthFormat = d3.timeFormat("%Y-%m");
+            const months = [...new Set(filteredDataP3.map(d => monthFormat(d.opening_date)))].sort();
+            if (months.length < 2) {
+                container.innerHTML = '<div class="text-slate-400 text-center py-10 font-medium">Need at least 2 months for trend analysis</div>';
+                return;
+            }
+
+            const latestM = months[months.length - 1];
+            const prevM = months[months.length - 2];
+            const locations = [...new Set(filteredDataP3.map(d => d.location))];
+
+            const grouped = d3.rollup(filteredDataP3,
+                v => d3.rollup(v, g => g.length, d => monthFormat(d.opening_date)),
+                d => d.location
+            );
+
+            const trendData = locations.map(loc => {
+                const locMonths = grouped.get(loc) || new Map();
+                const latest = locMonths.get(latestM) || 0;
+                const prev = locMonths.get(prevM) || 0;
+                return { location: loc, diff: latest - prev };
+            }).filter(d => d.diff > 0)
+                .sort((a, b) => b.diff - a.diff)
+                .slice(0, 10);
+
+            if (!trendData.length) {
+                container.innerHTML = '<div class="text-slate-400 text-center py-10 font-medium">No negative trends found</div>';
+                return;
+            }
+
+            trendData.forEach((d, i) => {
+                const card = document.createElement('div');
+                card.className = "group border-2 border-rose-100 rounded-2xl p-4 bg-white hover:border-rose-300 transition-all duration-300 shadow-sm relative overflow-hidden";
+                card.innerHTML = `
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-rose-50 rounded-bl-full -mr-4 -mt-4 opacity-50 group-hover:scale-110 transition-transform"></div>
+                    <div class="flex justify-between items-center relative z-10">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl font-black text-rose-500">${i + 1}.</span>
+                            <h3 class="text-lg font-bold text-slate-800">${d.location}</h3>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black text-rose-600 leading-none">+${d.diff}</div>
+                            <div class="text-[10px] font-bold text-rose-500 uppercase mt-1 flex items-center justify-end">
+                                <span class="mr-1">🚨</span> แย่ลง
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderCategoryComparisonGridP3() {
+            const container = document.getElementById('category-grid-wrapper-p3');
+            container.innerHTML = '';
+            if (!filteredDataP3.length) return;
+
+            const monthFormat = d3.timeFormat("%Y-%m");
+            const months = [...new Set(filteredDataP3.map(d => monthFormat(d.opening_date)))].sort();
+            if (months.length < 1) return;
+
+            const latestM = months[months.length - 1];
+            const prevM = months.length >= 2 ? months[months.length - 2] : null;
+
+            const locations = [...new Set(filteredDataP3.map(d => d.location))].sort();
+            const categories = allCategories;
+
+            // Group data by [Location][Category][Month]
+            const grouped = d3.rollup(filteredDataP3,
+                v => d3.rollup(v, g => g.length, d => monthFormat(d.opening_date)),
+                d => d.location,
+                d => d.Category || "Other"
+            );
+
+            let html = `<table class="w-full text-left text-[11px] border-collapse table-fixed">
+                <thead class="sticky top-0 bg-slate-50 z-20 border-b-2 border-slate-200">
+                    <tr>
+                        <th class="px-2 py-3 text-slate-500 font-bold border-r w-32">Location</th>`;
+
+            categories.forEach(cat => {
+                html += `<th class="px-1 py-3 text-slate-500 font-bold text-center border-r">${cat}</th>`;
+            });
+
+            html += `<th class="px-2 py-3 text-emerald-600 font-black text-center w-28">Summary</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">`;
+
+            locations.forEach(loc => {
+                const color = getLocationColor(loc);
+                const bgColor = getPastelColor(color);
+                const locData = grouped.get(loc) || new Map();
+
+                let rowSummary = 0;
+
+                html += `<tr style="background-color: ${bgColor}">
+                    <td class="px-2 py-3 font-bold text-slate-700 border-r truncate">${loc}</td>`;
+
+                categories.forEach(cat => {
+                    const catMData = locData.get(cat) || new Map();
+                    const latestCount = catMData.get(latestM) || 0;
+                    const prevCount = prevM ? (catMData.get(prevM) || 0) : latestCount;
+
+                    let trendIcon = "";
+                    let trendClass = "text-slate-400";
+                    const diff = latestCount - prevCount;
+                    rowSummary += diff;
+
+                    if (diff > 0) {
+                        trendIcon = "↑";
+                        trendClass = "text-rose-600 font-bold";
+                    } else if (diff < 0) {
+                        trendIcon = "↓";
+                        trendClass = "text-emerald-600 font-bold";
+                    }
+
+                    html += `<td class="px-1 py-3 text-center border-r">
+                        <div class="font-black text-slate-800">${latestCount}</div>
+                        <div class="${trendClass} text-[9px] leading-none">${trendIcon}</div>
+                    </td>`;
+                });
+
+                let summaryText = "-";
+                let summaryClass = "text-slate-500";
+
+                if (rowSummary > 0) {
+                    summaryText = `แย่ลง (+${rowSummary})`;
+                    summaryClass = "text-rose-600 font-black";
+                } else if (rowSummary < 0) {
+                    summaryText = `ดีขึ้น (${rowSummary})`;
+                    summaryClass = "text-emerald-600 font-black";
+                }
+
+                html += `<td class="px-2 py-3 text-center ${summaryClass}">${summaryText}</td>
+                </tr>`;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
         }
 
         function renderHazardousListP2() {
