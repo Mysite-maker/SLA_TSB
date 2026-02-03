@@ -1306,8 +1306,15 @@
                 tableHtml += `<tr style="background-color: ${bgColor}">
                     <td class="px-6 py-4 font-bold text-slate-700">${loc}</td>`;
 
-                months.forEach(m => {
-                    tableHtml += `<td class="px-6 py-4 text-center font-bold text-slate-600">${mCounts.get(m) || 0}</td>`;
+                months.forEach((m, idx) => {
+                    let countColor = "text-slate-600";
+                    if (idx > 0) {
+                        const currentVal = mCounts.get(m) || 0;
+                        const prevVal = mCounts.get(months[idx - 1]) || 0;
+                        if (currentVal > prevVal) countColor = "text-red-600";
+                        else if (currentVal < prevVal) countColor = "text-green-600";
+                    }
+                    tableHtml += `<td class="px-6 py-4 text-center font-bold ${countColor}">${mCounts.get(m) || 0}</td>`;
                 });
 
                 // Result logic: compare last two months
@@ -1316,9 +1323,9 @@
                     const last = mCounts.get(months[months.length - 1]) || 0;
                     const prev = mCounts.get(months[months.length - 2]) || 0;
                     if (last < prev) {
-                        result = '<span class="text-emerald-600 flex items-center justify-center gap-1 font-bold">ดีขึ้น ↓</span>';
+                        result = '<span class="text-green-600 flex items-center justify-center gap-1 font-bold">ดีขึ้น ↓</span>';
                     } else if (last > prev) {
-                        result = '<span class="text-rose-600 flex items-center justify-center gap-1 font-bold">แย่ลง ↑</span>';
+                        result = '<span class="text-red-600 flex items-center justify-center gap-1 font-bold">แย่ลง ↑</span>';
                     } else {
                         result = '<span class="text-slate-400 font-bold">-</span>';
                     }
@@ -1368,17 +1375,17 @@
 
             trendData.forEach((d, i) => {
                 const card = document.createElement('div');
-                card.className = "group border-2 border-rose-100 rounded-2xl p-4 bg-white hover:border-rose-300 transition-all duration-300 shadow-sm relative overflow-hidden";
+                card.className = "group border-2 border-red-100 rounded-2xl p-4 bg-white hover:border-red-300 transition-all duration-300 shadow-sm relative overflow-hidden";
                 card.innerHTML = `
-                    <div class="absolute top-0 right-0 w-16 h-16 bg-rose-50 rounded-bl-full -mr-4 -mt-4 opacity-50 group-hover:scale-110 transition-transform"></div>
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-red-50 rounded-bl-full -mr-4 -mt-4 opacity-50 group-hover:scale-110 transition-transform"></div>
                     <div class="flex justify-between items-center relative z-10">
                         <div class="flex items-center gap-3">
-                            <span class="text-2xl font-black text-rose-500">${i + 1}.</span>
+                            <span class="text-2xl font-black text-red-500">${i + 1}.</span>
                             <h3 class="text-lg font-bold text-slate-800">${d.location}</h3>
                         </div>
                         <div class="text-right">
-                            <div class="text-2xl font-black text-rose-600 leading-none">+${d.diff}</div>
-                            <div class="text-[10px] font-bold text-rose-500 uppercase mt-1 flex items-center justify-end">
+                            <div class="text-2xl font-black text-red-600 leading-none">+${d.diff}</div>
+                            <div class="text-[10px] font-bold text-red-500 uppercase mt-1 flex items-center justify-end">
                                 <span class="mr-1">🚨</span> แย่ลง
                             </div>
                         </div>
@@ -1446,14 +1453,14 @@
 
                     if (diff > 0) {
                         trendIcon = "↑";
-                        trendClass = "text-rose-600 font-bold";
+                        trendClass = "text-red-600 font-bold";
                     } else if (diff < 0) {
                         trendIcon = "↓";
-                        trendClass = "text-emerald-600 font-bold";
+                        trendClass = "text-green-600 font-bold";
                     }
 
                     html += `<td class="px-1 py-3 text-center border-r">
-                        <div class="font-black text-slate-800">${latestCount}</div>
+                        <div class="font-black ${trendClass}">${latestCount}</div>
                         <div class="${trendClass} text-[9px] leading-none">${trendIcon}</div>
                     </td>`;
                 });
@@ -1463,10 +1470,10 @@
 
                 if (rowSummary > 0) {
                     summaryText = `แย่ลง (+${rowSummary})`;
-                    summaryClass = "text-rose-600 font-black";
+                    summaryClass = "text-red-600 font-black";
                 } else if (rowSummary < 0) {
                     summaryText = `ดีขึ้น (${rowSummary})`;
-                    summaryClass = "text-emerald-600 font-black";
+                    summaryClass = "text-green-600 font-black";
                 }
 
                 html += `<td class="px-2 py-3 text-center ${summaryClass}">${summaryText}</td>
