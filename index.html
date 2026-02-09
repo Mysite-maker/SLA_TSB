@@ -292,7 +292,7 @@
 
             <!-- Filters Toolbar -->
             <section
-                class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm grid grid-cols-1 md:grid-cols-5 gap-6">
+                class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Opened
                         From</label>
@@ -317,6 +317,14 @@
                     <select id="category-filter"
                         class="w-full bg-slate-50 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none">
                         <option value="ALL">All Categories</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Ticket
+                        Status</label>
+                    <select id="status-filter"
+                        class="w-full bg-slate-50 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none">
+                        <option value="ALL">All Statuses</option>
                     </select>
                 </div>
                 <div>
@@ -509,13 +517,36 @@
                         <option value="ALL">All Categories</option>
                     </select>
                 </div>
-                <div>
+                <div class="relative">
                     <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Plate
                     </label>
-                    <select id="plate-filter-p2"
-                        class="w-full bg-slate-50 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none">
-                        <option value="ALL">All Plates</option>
-                    </select>
+                    <div class="relative">
+                        <input id="plate-filter-p2" type="text" placeholder="Search Plate..." autocomplete="off"
+                            class="w-full bg-slate-50 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none truncate pr-10">
+                        <div id="plate-chevron-p2"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-slate-400 hover:text-indigo-600 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div id="plate-clear-p2"
+                            class="hidden absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-slate-400 hover:text-rose-500 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Custom Dropdown List -->
+                    <div id="plate-dropdown-list-p2"
+                        class="hidden absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                        <!-- Options will be populated here -->
+                    </div>
                 </div>
             </section>
 
@@ -762,8 +793,9 @@
                 'total-tickets', 'sla-exceeded-count', 'sla-met-count',
                 'sla-met-percent', 'sla-exceeded-percent',
                 'sla-bar-exceeded', 'sla-bar-met',
-                'date-start', 'date-end', 'location-filter', 'category-filter', 'sla-filter',
+                'date-start', 'date-end', 'location-filter', 'category-filter', 'status-filter', 'sla-filter',
                 'date-start-p2', 'date-end-p2', 'location-filter-p2', 'category-filter-p2', 'plate-filter-p2',
+                'plate-dropdown-list-p2', 'plate-chevron-p2', 'plate-clear-p2',
                 'date-start-p3', 'date-end-p3',
                 'sort-filter', 'sort-filter-p2'
             ];
@@ -1039,14 +1071,19 @@
                 locationFilterP2.appendChild(opt);
             });
 
-            const plateFilterP2 = document.getElementById('plate-filter-p2');
-            plateFilterP2.innerHTML = '<option value="ALL">All Plates</option>';
-            const plates = [...new Set(data.map(d => d.plate))].sort();
-            plates.forEach(p => {
+            // Ticket Status Filter (Page 1)
+            const statusFilter = document.getElementById('status-filter');
+            statusFilter.innerHTML = '<option value="ALL">All Statuses</option>';
+            const statuses = [...new Set(data.map(d => d.Status))].sort();
+            statuses.forEach(s => {
                 const opt = document.createElement('option');
-                opt.value = opt.textContent = p;
-                plateFilterP2.appendChild(opt);
+                opt.value = opt.textContent = s;
+                statusFilter.appendChild(opt);
             });
+
+            // Plate Filter Custom Dropdown
+            const plates = [...new Set(data.map(d => d.plate))].sort((a, b) => a.localeCompare(b));
+            setupPlateDropdown(plates);
 
             // Populate Category Filters
             const categories = [...new Set(data.map(d => d.Category || "Other"))].sort();
@@ -1081,10 +1118,128 @@
             }
 
             document.querySelectorAll('#page-performance input, #page-performance select').forEach(el => el.onchange = () => updateDashboard());
-            document.querySelectorAll('#page-analysis input, #page-analysis select').forEach(el => el.onchange = () => updateDashboardP2());
+            document.querySelectorAll('#page-analysis input, #page-analysis select').forEach(el => {
+                // Skip plate filter input as it has custom handling
+                if (el.id === 'plate-filter-p2') return;
+
+                el.onchange = () => updateDashboardP2();
+                if (el.tagName === 'INPUT') {
+                    // Debounce input for better performance
+                    let timeout;
+                    el.oninput = () => {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(() => updateDashboardP2(), 400);
+                    };
+                }
+            });
             document.querySelectorAll('#page-compare input, #page-compare select').forEach(el => el.onchange = () => updateDashboardP3());
 
             updateDashboard();
+        }
+
+        function setupPlateDropdown(plates) {
+            const input = elements['plate-filter-p2'];
+            const list = elements['plate-dropdown-list-p2'];
+            const chevron = elements['plate-chevron-p2'];
+            const clearBtn = elements['plate-clear-p2'];
+
+            let allPlates = plates;
+            let debounceTimeout;
+
+            // Expose update function globally/on window for dynamic filtering
+            window.updatePlateDropdownList = (newPlates) => {
+                allPlates = newPlates;
+                renderOptions(input.value, false);
+            };
+
+            function renderOptions(filterText = '', showAll = false) {
+                list.innerHTML = '';
+                const normalize = str => str.toLowerCase().replace(/\s+/g, '');
+                const search = normalize(filterText);
+
+                // Filter options
+                const matches = showAll ? allPlates : allPlates.filter(p => normalize(p).includes(search));
+
+                if (matches.length === 0) {
+                    list.innerHTML = '<div class="px-4 py-2 text-slate-400 text-xs text-center">No plates found</div>';
+                } else {
+                    // "All Plates" option if showing all or search is empty
+                    if (showAll || !search) {
+                        const div = document.createElement('div');
+                        div.className = 'px-4 py-2 hover:bg-indigo-50 cursor-pointer text-sm text-slate-600 font-medium';
+                        div.textContent = 'All Plates';
+                        div.onclick = () => selectPlate('');
+                        list.appendChild(div);
+                    }
+
+                    matches.forEach(p => {
+                        const div = document.createElement('div');
+                        div.className = `px-4 py-2 hover:bg-indigo-50 cursor-pointer text-sm ${p === input.value ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600'}`;
+                        div.textContent = p;
+                        div.onclick = () => selectPlate(p);
+                        list.appendChild(div);
+                    });
+                }
+
+                list.classList.remove('hidden');
+            }
+
+            function selectPlate(plate) {
+                input.value = plate;
+                updateClearButton();
+                list.classList.add('hidden');
+                updateDashboardP2(); // Immediate update on selection
+            }
+
+            function updateClearButton() {
+                if (input.value) {
+                    clearBtn.classList.remove('hidden');
+                    chevron.classList.add('hidden');
+                } else {
+                    clearBtn.classList.add('hidden');
+                    chevron.classList.remove('hidden');
+                }
+            }
+
+            // Input Event (Typing)
+            input.oninput = () => {
+                updateClearButton();
+                renderOptions(input.value, false);
+
+                // Debounce Dashboard Update
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    updateDashboardP2();
+                }, 400);
+            };
+
+            // Focus Event
+            input.onfocus = () => {
+                input.select(); // Easy replacement
+                renderOptions(input.value, false); // Filter by current text
+            };
+
+            // Chevron Click (Show All)
+            chevron.onclick = (e) => {
+                e.stopPropagation();
+                input.focus();
+                renderOptions('', true); // Force show all
+            };
+
+            // Clear Click
+            clearBtn.onclick = (e) => {
+                e.stopPropagation();
+                selectPlate('');
+                input.focus();
+                renderOptions('', true);
+            };
+
+            // Close when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !list.contains(e.target) && !chevron.contains(e.target) && !clearBtn.contains(e.target)) {
+                    list.classList.add('hidden');
+                }
+            });
         }
 
         function applyFilters() {
@@ -1092,19 +1247,73 @@
             const endDateStr = elements['date-end'].value;
             const loc = elements['location-filter'].value;
             const cat = elements['category-filter'].value;
+            const status = elements['status-filter'].value;
             const sla = elements['sla-filter'].value;
 
             const start = startDateStr ? new Date(startDateStr) : null;
             const end = endDateStr ? new Date(endDateStr) : null;
             if (end) end.setHours(23, 59, 59);
 
-            filteredData = rawData.filter(d => {
-                const dateMatch = (!start || d.opening_date >= start) && (!end || d.opening_date <= end);
+            // 1. Filter by Date First to get available options
+            const dateFilteredData = rawData.filter(d => {
+                return (!start || d.opening_date >= start) && (!end || d.opening_date <= end);
+            });
+
+            // 2. Update Dropdown Options dynamically
+            updatePerformanceFilterOptions(dateFilteredData, loc, cat, status);
+
+            // 3. Apply all filters
+            filteredData = dateFilteredData.filter(d => {
                 const locMatch = loc === 'ALL' || d.location === loc;
                 const catMatch = cat === 'ALL' || (d.Category || "Other") === cat;
+                const statusMatch = status === 'ALL' || d.Status === status;
                 const slaMatch = sla === 'ALL' || d['Time to resolve exceeded'] === sla;
-                return dateMatch && locMatch && catMatch && slaMatch;
+                return locMatch && catMatch && statusMatch && slaMatch;
             });
+        }
+
+        function updatePerformanceFilterOptions(data, currentLoc, currentCat, currentStatus) {
+            const locSelect = elements['location-filter'];
+            const catSelect = elements['category-filter'];
+            const statusSelect = elements['status-filter'];
+
+            // Helper to update select options while preserving selection if possible
+            const updateSelect = (select, items, currentVal) => {
+                select.innerHTML = '';
+                const allOpt = document.createElement('option');
+                allOpt.value = 'ALL';
+                // Update "All" text based on filter type
+                if (select.id.includes('location')) allOpt.textContent = 'All Regions';
+                else if (select.id.includes('category')) allOpt.textContent = 'All Categories';
+                else if (select.id.includes('status')) allOpt.textContent = 'All Statuses';
+                select.appendChild(allOpt);
+
+                items.forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = opt.textContent = item;
+                    select.appendChild(opt);
+                });
+
+                // Restore selection if it still exists, otherwise default to ALL
+                if (items.includes(currentVal)) {
+                    select.value = currentVal;
+                } else {
+                    select.value = 'ALL';
+                }
+            };
+
+            const uniqueLocs = [...new Set(data.map(d => d.location))].sort();
+            const uniqueCats = [...new Set(data.map(d => d.Category || "Other"))].sort();
+            const uniqueStatus = [...new Set(data.map(d => d.Status))].sort();
+
+            // Note: We update all dropdowns based on Date filter only (independent of each other to avoid locking)
+            // Or we could make them dependent. For now, Date is the master filter.
+            // Let's check if the user wants them to be fully dependent (cascading).
+            // Usually, having them all depend on Date is safest to prevent "disappearing options" confusion.
+
+            updateSelect(locSelect, uniqueLocs, currentLoc);
+            updateSelect(catSelect, uniqueCats, currentCat);
+            updateSelect(statusSelect, uniqueStatus, currentStatus);
         }
 
         function applyFiltersP2() {
@@ -1112,18 +1321,32 @@
             const endDateStr = elements['date-end-p2'].value;
             const loc = elements['location-filter-p2'].value;
             const cat = elements['category-filter-p2'].value;
-            const plate = elements['plate-filter-p2'].value;
+            const plateSearch = elements['plate-filter-p2'].value.toLowerCase().trim();
 
             const start = startDateStr ? new Date(startDateStr) : null;
             const end = endDateStr ? new Date(endDateStr) : null;
             if (end) end.setHours(23, 59, 59);
 
-            filteredDataP2 = rawData.filter(d => {
+            // 1. First Pass: Filter by Date, Location, and Category ONLY
+            // This determines the valid plates for the dropdown
+            const baseData = rawData.filter(d => {
                 const dateMatch = (!start || d.opening_date >= start) && (!end || d.opening_date <= end);
                 const locMatch = loc === 'ALL' || d.location === loc;
                 const catMatch = cat === 'ALL' || (d.Category || "Other") === cat;
-                const plateMatch = plate === 'ALL' || d.plate === plate;
-                return dateMatch && locMatch && catMatch && plateMatch;
+                return dateMatch && locMatch && catMatch;
+            });
+
+            // 2. Update the Plate Dropdown List dynamically based on this context
+            // This ensures the list only shows relevant plates (and is faster)
+            const availablePlates = [...new Set(baseData.map(d => d.plate))].sort((a, b) => a.localeCompare(b));
+            if (window.updatePlateDropdownList) {
+                window.updatePlateDropdownList(availablePlates);
+            }
+
+            // 3. Second Pass: Apply Plate Filter
+            filteredDataP2 = baseData.filter(d => {
+                const plateMatch = !plateSearch || plateSearch === 'all' || d.plate.toLowerCase().includes(plateSearch);
+                return plateMatch;
             });
         }
 
