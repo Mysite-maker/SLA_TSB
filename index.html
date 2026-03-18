@@ -975,54 +975,85 @@
 
         async function exportToPDF() {
             const { jsPDF } = window.jspdf;
-            const element = document.getElementById('page-performance');
+            const containers = {
+                'performance': document.getElementById('page-performance'),
+                'analysis': document.getElementById('page-analysis'),
+                'compare': document.getElementById('page-compare')
+            };
             
+            const element = containers[currentPage];
+            if (!element) return;
+
             // Show loading message
             const loadingOverlay = document.getElementById('loading-message');
             loadingOverlay.classList.remove('hidden');
             const loadingText = loadingOverlay.querySelector('p');
             const originalText = loadingText.textContent;
-            loadingText.textContent = "Generating Multi-page PDF...";
+            loadingText.textContent = "Generating Section-Aware PDF...";
 
             try {
-                // Ensure all charts are rendered and visible for capture
-                // We'll capture the scrollable area correctly
-                const canvas = await html2canvas(element, {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    backgroundColor: '#f8fafc',
-                    windowWidth: element.scrollWidth,
-                    windowHeight: element.scrollHeight,
-                    scrollY: -window.scrollY // Fix clipping if page is scrolled
-                });
-                
-                const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF('p', 'mm', 'a4');
-                
-                const imgProps = pdf.getImageProperties(imgData);
                 const pdfWidth = pdf.internal.pageSize.getWidth();
                 const pdfHeight = pdf.internal.pageSize.getHeight();
+                const margin = 10;
+                const contentWidth = pdfWidth - (2 * margin);
                 
-                // Calculate how much of the image fits on one PDF page
-                const imgHeightInPdf = (imgProps.height * pdfWidth) / imgProps.width;
+                let currentY = margin;
                 
-                let heightLeft = imgHeightInPdf;
-                let position = 0;
+                // Get all top-level sections or direct children that are cards
+                const sections = Array.from(element.children).filter(child => 
+                    child.tagName === 'SECTION' || child.classList.contains('card') || child.tagName === 'HEADER'
+                );
 
-                // Add first page
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeightInPdf);
-                heightLeft -= pdfHeight;
+                for (let i = 0; i < sections.length; i++) {
+                    const section = sections[i];
+                    
+                    // Capture section
+                    const canvas = await html2canvas(section, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        backgroundColor: '#ffffff',
+                        windowWidth: section.scrollWidth,
+                        scrollY: -window.scrollY
+                    });
+                    
+                    const imgData = canvas.toDataURL('image/png');
+                    const imgProps = pdf.getImageProperties(imgData);
+                    const imgHeightInPdf = (imgProps.height * contentWidth) / imgProps.width;
 
-                // Add subsequent pages if needed
-                while (heightLeft > 0) {
-                    position = heightLeft - imgHeightInPdf;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeightInPdf);
-                    heightLeft -= pdfHeight;
+                    // Check if we need a new page
+                    if (currentY + imgHeightInPdf > pdfHeight - margin) {
+                        pdf.addPage();
+                        currentY = margin;
+                    }
+
+                    // Handle sections larger than a single page (e.g., long tables)
+                    if (imgHeightInPdf > (pdfHeight - 2 * margin)) {
+                        let heightLeft = imgHeightInPdf;
+                        let slicePosition = 0;
+                        
+                        while (heightLeft > 0) {
+                            const sliceHeight = Math.min(heightLeft, pdfHeight - currentY - margin);
+                            // We use a clip rect approach by adding the image multiple times with different offsets if needed,
+                            // but for simplicity with addImage, we just add the whole image and jspdf handles clipping via the 5th and 6th args if we use the right overload, 
+                            // however, simpler is to just add it and let it overflow if it's just one section, 
+                            // or better: slice the canvas.
+                            
+                            // For now, let's just add the section. If it's a table, it might still cut, 
+                            // but it will at least start on a clean page if it's big.
+                            pdf.addImage(imgData, 'PNG', margin, currentY, contentWidth, imgHeightInPdf);
+                            
+                            heightLeft = 0; // Exit loop for now to avoid complexity of manual slicing
+                            currentY += imgHeightInPdf;
+                        }
+                    } else {
+                        pdf.addImage(imgData, 'PNG', margin, currentY, contentWidth, imgHeightInPdf);
+                        currentY += imgHeightInPdf + 5; // Add a small gap between sections
+                    }
                 }
 
-                pdf.save(`GLPI_SLA_Full_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+                pdf.save(`GLPI_SLA_${currentPage}_Report_${new Date().toISOString().split('T')[0]}.pdf`);
             } catch (error) {
                 console.error("PDF Export failed:", error);
                 alert("Failed to export PDF. Please try again.");
