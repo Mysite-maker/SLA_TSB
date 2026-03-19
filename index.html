@@ -970,7 +970,7 @@
         document.getElementById('export-btn').addEventListener('click', exportData);
         document.getElementById('export-pdf-btn').addEventListener('click', exportToPDF);
         document.getElementById('summary-btn').addEventListener('click', () => {
-            window.location.open = 'exec_summary.html';
+            window.open('exec_summary.html', '_blank');
         });
 
         async function exportToPDF() {
