@@ -1291,7 +1291,7 @@
                 renderOptions(input.value, false);
             };
 
-            function renderOptions(filterText = '', showAll = false) {
+            function renderOptions(filterText = '', showAll = false, forceShow = false) {
                 list.innerHTML = '';
                 const normalize = str => str.toLowerCase().replace(/\s+/g, '');
                 const search = normalize(filterText);
@@ -1320,7 +1320,7 @@
                     });
                 }
 
-                list.classList.remove('hidden');
+                if (forceShow) list.classList.remove('hidden');
             }
 
             function selectPlate(plate) {
@@ -1343,7 +1343,7 @@
             // Input Event (Typing)
             input.oninput = () => {
                 updateClearButton();
-                renderOptions(input.value, false);
+                renderOptions(input.value, false, true);
 
                 // Debounce Dashboard Update
                 clearTimeout(debounceTimeout);
@@ -1355,14 +1355,14 @@
             // Focus Event
             input.onfocus = () => {
                 input.select(); // Easy replacement
-                renderOptions(input.value, false); // Filter by current text
+                renderOptions(input.value, false, true); // Filter by current text
             };
 
             // Chevron Click (Show All)
             chevron.onclick = (e) => {
                 e.stopPropagation();
                 input.focus();
-                renderOptions('', true); // Force show all
+                renderOptions('', true, true); // Force show all
             };
 
             // Clear Click
@@ -1370,7 +1370,7 @@
                 e.stopPropagation();
                 selectPlate('');
                 input.focus();
-                renderOptions('', true);
+                renderOptions('', true, true);
             };
 
             // Close when clicking outside
