@@ -41,7 +41,6 @@
 
 <body>
 
-    <!-- UI Controls -->
     <div class="no-print max-w-[210mm] mx-auto mt-6 mb-4 flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200">
         <div class="flex gap-4 items-center">
             <input type="file" id="csv-upload" accept=".csv" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
@@ -52,12 +51,10 @@
         </button>
     </div>
 
-    <!-- Main Report Document -->
     <div id="report-content" class="report-container">
         
-        <!-- Header Section -->
         <div class="mb-10">
-            <h1 class="text-3xl font-[800] text-blue-600 leading-tight mb-2">
+            <h1 class="text-3xl font-[800] text-blue-600 leading-tight mb-2 uppercase">
                 ITS executive summary (KPI&SLA)
             </h1>
             <div class="flex items-center justify-between border-t border-b border-slate-100 py-3 mt-4">
@@ -78,7 +75,6 @@
             </div>
         </div>
 
-        <!-- Section 1: Status Performance Analysis -->
         <div class="mb-10">
             <h3 class="text-[11px] font-black text-blue-500 mb-6 uppercase tracking-[0.2em] flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-blue-500"></span>
@@ -86,7 +82,6 @@
             </h3>
             
             <div class="grid grid-cols-3 gap-6">
-                <!-- KPI 1 -->
                 <div class="stat-card-gradient border border-blue-100 rounded-2xl p-6 relative overflow-hidden">
                     <div class="relative z-10">
                         <div class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Total Tickets</div>
@@ -95,29 +90,25 @@
                     <svg class="absolute -right-2 -bottom-2 text-blue-50 opacity-50" width="80" height="80" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
                 </div>
 
-                <!-- KPI 2 -->
                 <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg shadow-emerald-100 relative overflow-hidden">
                     <div class="relative z-10">
-                        <div class="text-[10px] font-bold text-emerald-100 uppercase tracking-widest mb-1">SLA Compliance</div>
-                        <div id="kpi-sla" class="text-4xl font-[800] tracking-tighter">0%</div>
+                        <div class="text-[10px] font-bold text-emerald-100 uppercase tracking-widest mb-1">Breach / OK</div>
+                        <div id="kpi-sla" class="text-3xl font-[800] tracking-tighter">0 / 0</div>
                     </div>
                     <svg class="absolute -right-2 -bottom-2 text-white opacity-20" width="80" height="80" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 </div>
 
-                <!-- KPI 3 -->
                 <div class="bg-gradient-to-br from-orange-400 to-amber-500 rounded-2xl p-6 text-white shadow-lg shadow-orange-100 relative overflow-hidden">
                     <div class="relative z-10">
-                        <div class="text-[10px] font-bold text-orange-50 uppercase tracking-widest mb-1">KPI Benchmark</div>
-                        <div id="kpi-kpi" class="text-4xl font-[800] tracking-tighter">100%</div>
+                        <div class="text-[10px] font-bold text-orange-50 uppercase tracking-widest mb-1">KPI Compliance</div>
+                        <div id="kpi-kpi" class="text-4xl font-[800] tracking-tighter">0%</div>
                     </div>
                     <svg class="absolute -right-2 -bottom-2 text-white opacity-20" width="80" height="80" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
                 </div>
             </div>
         </div>
 
-        <!-- Section 2: Distribution Insights -->
         <div class="grid grid-cols-12 gap-10 mb-10">
-            <!-- Left: Category Distribution -->
             <div class="col-span-7">
                 <h3 class="text-[11px] font-black text-blue-500 mb-6 uppercase tracking-[0.2em] flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-blue-500"></span>
@@ -125,15 +116,13 @@
                 </h3>
                 
                 <div class="space-y-5" id="category-distribution">
-                    <!-- Dynamic Rows -->
-                </div>
+                    </div>
             </div>
 
-            <!-- Right: Location Leaderboard -->
             <div class="col-span-5">
                 <h3 class="text-[11px] font-black text-blue-500 mb-6 uppercase tracking-[0.2em] flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                    03. Top10 Locations
+                    03. Top 10 Locations
                 </h3>
                 
                 <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
@@ -145,22 +134,28 @@
                             </tr>
                         </thead>
                         <tbody id="location-table-body" class="divide-y divide-slate-50">
-                            <!-- Rows -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-       
+        <div class="mt-8 border-t border-slate-100 pt-8 mb-20">
+            <h3 class="text-[11px] font-black text-blue-500 mb-6 uppercase tracking-[0.2em] flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                04. Executive Analysis & Recommendations
+            </h3>
+            <div id="analysis-content" class="bg-slate-50 rounded-2xl p-6 border border-slate-100 min-height-[100px]">
+                <p class="text-xs text-slate-400 italic">กรุณาอัปโหลดไฟล์เพื่อเริ่มการวิเคราะห์ข้อมูล...</p>
+            </div>
+        </div>
 
-        <!-- Footer -->
         <div class="absolute bottom-10 left-20 right-20 flex justify-between items-center border-t border-slate-100 pt-6">
             <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                 Internal Use Only
             </div>
-            <div class="text-[10px] text-slate-300 font-bold uppercase tracking-widest">
+            <div class="text-[10px] text-slate-300 font-bold uppercase tracking-widest italic">
                 ITS monthly report &copy; 2026
             </div>
         </div>
@@ -198,12 +193,12 @@
             allData = data;
             renderReport();
         }
-function renderReport() {
- 						if (!allData.length) return;
+
+        function renderReport() {
+            if (!allData.length) return;
 
             const total = allData.length;
             
-            // กรองสถานะ OK และ Breach ให้ตรงกับตัวเลข 1905 และ 495
             const slaMetCount = allData.filter(d => {
                 const status = (d['SLA Status'] || "").trim().toUpperCase();
                 return status === 'OK';
@@ -218,9 +213,8 @@ function renderReport() {
 
             document.getElementById('kpi-total').innerText = total.toLocaleString();
             
-            // แสดงผล: Breach (495) / OK (1905) ตามลำดับที่ท่านต้องการ
             document.getElementById('kpi-sla').innerHTML = `
-                <span class="text-red-500">${slaBreachCount.toLocaleString()}</span><span class="text-white mx-2">/</span><span class="text-green-400">${slaMetCount.toLocaleString()}</span>
+                <span class="text-red-300">${slaBreachCount.toLocaleString()}</span><span class="text-white/50 mx-2">/</span><span class="text-white">${slaMetCount.toLocaleString()}</span>
             `;
             document.getElementById('kpi-kpi').innerText = slaMetPct + '%';
             document.getElementById('gen-time').innerText = new Date().toLocaleString('th-TH');
@@ -231,38 +225,36 @@ function renderReport() {
                 document.getElementById('end-date').innerText = new Date(Math.max(...dates)).toLocaleDateString('th-TH');
             }
 
-            // Category Infographic
+            // Category Distribution
             const catMap = d3.rollup(allData, v => v.length, d => d.Category);
             const catData = Array.from(catMap, ([name, value]) => ({ name, value }))
                 .sort((a, b) => b.value - a.value);
 
-            const colors = ['#06b6d4', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'];
-
-document.getElementById('category-distribution').innerHTML = catData.map((c, i) => {
-    const pct = Math.round((c.value / total) * 100);
-    const colors = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#06b6d4'];
-    return `
-        <div class="mb-3">
-            <div class="flex justify-between items-center mb-1.5">
-                <span class="text-[11px] font-bold text-slate-700 uppercase tracking-tight">
-                    ${c.name || 'Other'} (${c.value.toLocaleString()})
-                </span>
-                <span class="text-xs font-black text-slate-900">${pct}%</span>
-            </div>
-            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                <div class="h-full rounded-full shadow-sm" style="width: ${pct}%; background-color: ${colors[i % colors.length]}"></div>
-            </div>
-        </div>
-    `;
+            document.getElementById('category-distribution').innerHTML = catData.map((c, i) => {
+                const pct = Math.round((c.value / total) * 100);
+                const colors = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#06b6d4'];
+                return `
+                    <div class="mb-3">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-[11px] font-bold text-slate-700 uppercase tracking-tight">
+                                ${c.name || 'Other'} (${c.value.toLocaleString()})
+                            </span>
+                            <span class="text-xs font-black text-slate-900">${pct}%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                            <div class="h-full rounded-full shadow-sm" style="width: ${pct}%; background-color: ${colors[i % colors.length]}"></div>
+                        </div>
+                    </div>
+                `;
             }).join('');
-            // Location Leaderboard: Slice to 10 and alternating light blue rows
+
+            // Location Leaderboard
             const locMap = d3.rollup(allData, v => v.length, d => d.Location);
             const locData = Array.from(locMap, ([name, value]) => ({ name, value }))
                 .sort((a, b) => b.value - a.value)
-                .slice(0, 10); // <--- แสดง 10 อันดับ
+                .slice(0, 10);
 
             document.getElementById('location-table-body').innerHTML = locData.map((l, index) => {
-                // เพิ่มสีพื้นหลังฟ้าอ่อนในแถวคี่ (หรือคู่ตามความสวยงาม)
                 const rowBgClass = (index % 2 !== 0) ? 'bg-blue-50/60' : '';
                 return `
                 <tr class="${rowBgClass} transition-colors">
@@ -271,6 +263,25 @@ document.getElementById('category-distribution').innerHTML = catData.map((c, i) 
                 </tr>
                 `;
             }).join('');
+
+            // --- 04. Executive Analysis (Logic เพิ่มเติม) ---
+            const topCat = catData[0];
+            const topLoc = locData[0];
+            const statusColor = slaMetPct >= 80 ? 'text-emerald-600' : 'text-red-600';
+
+            document.getElementById('analysis-content').innerHTML = `
+                <div class="text-sm leading-relaxed text-slate-600 space-y-4">
+                    <p>จากการวิเคราะห์ข้อมูลพบว่ามีการแจ้งซ่อมและใช้บริการรวมทั้งสิ้น <span class="font-bold text-slate-900">${total.toLocaleString()} </span> รายการ โดยสามารถทำได้ตาม SLA ที่   </span><span class="text-green-700">${slaMetCount.toLocaleString()}</span> 
+                  รายการและไม่ได้ตาม SLA จำนวน <span class="text-red-500">${slaBreachCount.toLocaleString()}</span> รายการ,
+                  และมีอัตราการให้บริการตามเป้าหมาย (KPI Compliance) อยู่ที่ <span class="font-bold ${statusColor}">${slaMetPct}%</span></p>
+                    
+                    <ul class="list-disc ml-5 space-y-2">
+                        <li><span class="font-bold text-slate-800 uppercase italic">Key Insight:</span> ประเภทอุปกรณ์ <span class="text-blue-600 font-bold uppercase">${topCat.name}</span> มีปริมาณงานสูงสุด คิดเป็น <span class="font-bold">${Math.round(topCat.value/total*100)}%</span> หรือ <span class="font-bold">${Math.round(topCat.value)}</span>  Tickets ของงานทั้งหมด</li>
+                        <li><span class="font-bold text-slate-800 uppercase italic">Hot Spot:</span> อู่ <span class="text-blue-600 font-bold uppercase">${topLoc.name}</span> มีความหนาแน่นของการแจ้งปัญหามากที่สุดในรอบนี้ คิดเป็นจำนวน <span class="font-bold">${topLoc.value}</span> Tickets</li>
+                        <li><span class="font-bold text-slate-800 uppercase italic">Recommendation:</span> ${slaMetPct < 98 ? 'ตรวจสอบสาเหตุของเคส Breach เพื่อเพิ่มประสิทธิภาพการปิดงาน' : 'รักษามาตรฐานการทำงานที่ดี และควรเพิ่มการตรวจสอบเชิงป้องกันในหมวดงานที่มีปริมาณสูง'}</li>
+                    </ul>
+                </div>
+            `;
         }
 
         async function exportPDF() {
@@ -280,7 +291,7 @@ document.getElementById('category-distribution').innerHTML = catData.map((c, i) 
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF('p', 'mm', 'a4');
             pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
-            pdf.save('Executive_Summary_DeepBlue.pdf');
+            pdf.save('Executive_Summary_With_Analysis.pdf');
         }
 
         window.onload = () => {
