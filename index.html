@@ -1123,7 +1123,8 @@
             document.getElementById('landing-page').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
             try {
-                const response = await fetch(rawUrl);
+                const bustUrl = rawUrl + (rawUrl.includes('?') ? '&' : '?') + '_=' + Date.now();
+                const response = await fetch(bustUrl, { cache: 'no-store' });
                 if (!response.ok) throw new Error('Could not fetch CSV from server.');
                 const csvText = await response.text();
                 Papa.parse(csvText, {
@@ -2688,7 +2689,8 @@ function updateStatistics() {
         async function fetchDataFromGitHub() {
             const rawUrl = 'https://raw.githubusercontent.com/Mysite-maker/SLA_TSB/refs/heads/main/glpi3.csv';
             try {
-                const response = await fetch(rawUrl);
+                const bustUrl = rawUrl + (rawUrl.includes('?') ? '&' : '?') + '_=' + Date.now();
+                const response = await fetch(bustUrl, { cache: 'no-store' });
                 if (!response.ok) throw new Error('ไม่สามารถดึงข้อมูลจาก Server ได้');
                 const csvText = await response.text();
                 
