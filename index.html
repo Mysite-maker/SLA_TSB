@@ -503,6 +503,26 @@
                         <tbody class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
+                <!-- Pagination Controls for Performance Tab -->
+                <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-sm text-slate-600">
+                    <div class="flex items-center gap-2">
+                        <span>Show</span>
+                        <select id="page-size-p1" class="bg-white border border-slate-200 rounded px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="25">25</option>
+                            <option value="50" selected>50</option>
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                        </select>
+                        <span>entries</span>
+                    </div>
+                    <div class="flex items-center gap-1 font-medium">
+                        <span id="page-info-p1">Showing 1 to 50 of 50 entries</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="prev-page-p1" class="px-3 py-1 bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+                        <button id="next-page-p1" class="px-3 py-1 bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+                    </div>
+                </div>
             </section>
 
             <!-- Technician Deep Dive -->
@@ -693,6 +713,26 @@
                         <tbody class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
+                <!-- Pagination Controls for Analysis Tab -->
+                <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-sm text-slate-600">
+                    <div class="flex items-center gap-2">
+                        <span>Show</span>
+                        <select id="page-size-p2" class="bg-white border border-slate-200 rounded px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="25">25</option>
+                            <option value="50" selected>50</option>
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                        </select>
+                        <span>entries</span>
+                    </div>
+                    <div class="flex items-center gap-1 font-medium">
+                        <span id="page-info-p2">Showing 1 to 50 of 50 entries</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="prev-page-p2" class="px-3 py-1 bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+                        <button id="next-page-p2" class="px-3 py-1 bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+                    </div>
+                </div>
             </section>
         </div>
 
@@ -792,6 +832,13 @@
         let filteredDataP3 = [];
         let allCategories = [];
         let currentPage = 'performance';
+        let currentPageP1 = 1;
+        let rowsPerPageP1 = 50;
+        let currentPageP2 = 1;
+        let rowsPerPageP2 = 50;
+        let needsRedrawP1 = true;
+        let needsRedrawP2 = true;
+        let needsRedrawP3 = true;
         const delimiter = ';';
         const DATE_FORMAT = d3.timeParse("%d-%m-%Y %H:%M");
         const TABLE_DATE_FORMAT = d3.timeFormat("%b %d, %H:%M");
@@ -1191,6 +1238,40 @@
             window.location.href = 'exec_summary.html';
         });
 
+        // Pagination Event Listeners for Performance Tab (P1)
+        document.getElementById('prev-page-p1').addEventListener('click', () => {
+            if (currentPageP1 > 1) {
+                currentPageP1--;
+                renderTable();
+            }
+        });
+        document.getElementById('next-page-p1').addEventListener('click', () => {
+            currentPageP1++;
+            renderTable();
+        });
+        document.getElementById('page-size-p1').addEventListener('change', (e) => {
+            rowsPerPageP1 = parseInt(e.target.value);
+            currentPageP1 = 1;
+            renderTable();
+        });
+
+        // Pagination Event Listeners for Analysis Tab (P2)
+        document.getElementById('prev-page-p2').addEventListener('click', () => {
+            if (currentPageP2 > 1) {
+                currentPageP2--;
+                renderTableP2();
+            }
+        });
+        document.getElementById('next-page-p2').addEventListener('click', () => {
+            currentPageP2++;
+            renderTableP2();
+        });
+        document.getElementById('page-size-p2').addEventListener('change', (e) => {
+            rowsPerPageP2 = parseInt(e.target.value);
+            currentPageP2 = 1;
+            renderTableP2();
+        });
+
         async function exportToPDF() {
             const { jsPDF } = window.jspdf;
             const containers = {
@@ -1301,17 +1382,17 @@
                 pPerf.classList.remove('hidden');
                 navPerf.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
                 navPerf.classList.remove('text-slate-500');
-                updateDashboard(true);
+                updateDashboard(false);
             } else if (page === 'analysis') {
                 pAnalysis.classList.remove('hidden');
                 navAnalysis.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
                 navAnalysis.classList.remove('text-slate-500');
-                updateDashboardP2(true);
+                updateDashboardP2(false);
             } else if (page === 'compare') {
                 pCompare.classList.remove('hidden');
                 navCompare.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
                 navCompare.classList.remove('text-slate-500');
-                updateDashboardP3(true);
+                updateDashboardP3(false);
             }
         }
 
@@ -1399,6 +1480,11 @@
         }
 
         function initializeFilters(data) {
+            currentPageP1 = 1;
+            currentPageP2 = 1;
+            needsRedrawP1 = true;
+            needsRedrawP2 = true;
+            needsRedrawP3 = true;
             // Page 1 Filters
             const locationFilter = document.getElementById('location-filter');
             locationFilter.innerHTML = '<option value="ALL">All Regions</option>';
@@ -1468,10 +1554,13 @@
             const debouncedP2 = debounce(() => updateDashboardP2(), 180);
             const debouncedP3 = debounce(() => updateDashboardP3(), 180);
 
-            document.querySelectorAll('#page-performance input, #page-performance select').forEach(el => el.onchange = debouncedP1);
+            document.querySelectorAll('#page-performance input, #page-performance select').forEach(el => {
+                if (el.id === 'page-size-p1') return;
+                el.onchange = debouncedP1;
+            });
             document.querySelectorAll('#page-analysis input, #page-analysis select').forEach(el => {
-                // Skip plate filter input as it has custom handling
-                if (el.id === 'plate-filter-p2') return;
+                // Skip plate filter input as it has custom handling, and page-size-p2
+                if (el.id === 'plate-filter-p2' || el.id === 'page-size-p2') return;
 
                 el.onchange = debouncedP2;
                 if (el.tagName === 'INPUT') {
@@ -1616,6 +1705,8 @@
                 const slaMatch = sla === 'ALL' || d['Time to resolve exceeded'] === sla;
                 return locMatch && catMatch && statusMatch && slaMatch;
             });
+            currentPageP1 = 1;
+            needsRedrawP1 = true;
         }
 
         function updatePerformanceFilterOptions(data, currentLoc, currentCat, currentStatus) {
@@ -1694,17 +1785,25 @@
                 const plateMatch = !plateSearch || plateSearch === 'all' || d.plate.toLowerCase().includes(plateSearch);
                 return plateMatch;
             });
+            currentPageP2 = 1;
+            needsRedrawP2 = true;
         }
 
         function updateDashboardP2(force = false) {
             if (!force && currentPage !== 'analysis') return;
-            applyFiltersP2();
-            computeAnalysisAggregates(filteredDataP2);
-            renderHazardousListP2();
-            renderCategoryPieChartP2();
-            renderLocationTreemapP2();
-            renderPlateStackedBarP2();
-            renderTableP2();
+            if (force) {
+                needsRedrawP2 = true;
+            }
+            if (needsRedrawP2) {
+                applyFiltersP2();
+                computeAnalysisAggregates(filteredDataP2);
+                renderHazardousListP2();
+                renderCategoryPieChartP2();
+                renderLocationTreemapP2();
+                renderPlateStackedBarP2();
+                renderTableP2();
+                needsRedrawP2 = false;
+            }
         }
 
         function applyFiltersP3() {
@@ -1720,15 +1819,22 @@
                 const dateMatch = (!start || d.opening_date >= start) && (!end || d.opening_date <= end);
                 return dateMatch;
             });
+            needsRedrawP3 = true;
         }
 
         function updateDashboardP3(force = false) {
             if (!force && currentPage !== 'compare') return;
-            applyFiltersP3();
-            renderLocationMonthlyBarChartP3();
-            renderComparisonTableP3();
-            renderTop10TrendP3();
-            renderCategoryComparisonGridP3();
+            if (force) {
+                needsRedrawP3 = true;
+            }
+            if (needsRedrawP3) {
+                applyFiltersP3();
+                renderLocationMonthlyBarChartP3();
+                renderComparisonTableP3();
+                renderTop10TrendP3();
+                renderCategoryComparisonGridP3();
+                needsRedrawP3 = false;
+            }
         }
 
         const locationColorScale = d3.scaleOrdinal(d3.schemeTableau10);
@@ -2318,7 +2424,22 @@
                 return 0;
             });
 
-            tbody.innerHTML = sorted.map(d => {
+            // Pagination calculation
+            const totalEntries = sorted.length;
+            const totalPages = Math.ceil(totalEntries / rowsPerPageP2) || 1;
+            if (currentPageP2 > totalPages) currentPageP2 = totalPages;
+            if (currentPageP2 < 1) currentPageP2 = 1;
+
+            const startIdx = (currentPageP2 - 1) * rowsPerPageP2;
+            const endIdx = Math.min(startIdx + rowsPerPageP2, totalEntries);
+            const pageData = sorted.slice(startIdx, endIdx);
+
+            // Update pagination UI controls
+            document.getElementById('page-info-p2').textContent = `Showing ${totalEntries ? startIdx + 1 : 0} to ${endIdx} of ${totalEntries} entries`;
+            document.getElementById('prev-page-p2').disabled = currentPageP2 <= 1;
+            document.getElementById('next-page-p2').disabled = currentPageP2 >= totalPages;
+
+            tbody.innerHTML = pageData.map(d => {
                 const config = statusConfig[d.Status] || defaultStatus;
                 const catValue = d.Category || '-';
                 const catStyle = getCategoryPillStyle(catValue);
@@ -2663,10 +2784,25 @@ function updateStatistics() {
                 return 0;
             });
 
+            // Pagination calculation
+            const totalEntries = sorted.length;
+            const totalPages = Math.ceil(totalEntries / rowsPerPageP1) || 1;
+            if (currentPageP1 > totalPages) currentPageP1 = totalPages;
+            if (currentPageP1 < 1) currentPageP1 = 1;
+
+            const startIdx = (currentPageP1 - 1) * rowsPerPageP1;
+            const endIdx = Math.min(startIdx + rowsPerPageP1, totalEntries);
+            const pageData = sorted.slice(startIdx, endIdx);
+
+            // Update pagination UI controls
+            document.getElementById('page-info-p1').textContent = `Showing ${totalEntries ? startIdx + 1 : 0} to ${endIdx} of ${totalEntries} entries`;
+            document.getElementById('prev-page-p1').disabled = currentPageP1 <= 1;
+            document.getElementById('next-page-p1').disabled = currentPageP1 >= totalPages;
+
             // Build HTML string in one shot — fastest for large tables
             const breachSVG = '<svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>';
 
-            const rows = sorted.map(d => {
+            const rows = pageData.map(d => {
                 const config = statusConfig[d.Status] || defaultStatus;
                 const catValue = d.Category || '-';
                 const catStyle = getCategoryPillStyle(catValue);
@@ -2732,14 +2868,20 @@ function updateStatistics() {
 
         function updateDashboard(force = false) {
             if (!force && currentPage !== 'performance') return;
-            applyFilters();
-            computePerformanceAggregates(filteredData);
-            updateStatistics();
-            renderStatusFunnel();
-            renderLocationChart();
-            renderTechnicianPieChart();
-            renderKPILeaderboard();
-            renderTable();
+            if (force) {
+                needsRedrawP1 = true;
+            }
+            if (needsRedrawP1) {
+                applyFilters();
+                computePerformanceAggregates(filteredData);
+                updateStatistics();
+                renderStatusFunnel();
+                renderLocationChart();
+                renderTechnicianPieChart();
+                renderKPILeaderboard();
+                renderTable();
+                needsRedrawP1 = false;
+            }
         }
 
         const resizeObserver = new ResizeObserver(() => {
