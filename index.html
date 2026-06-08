@@ -1382,17 +1382,23 @@
                 pPerf.classList.remove('hidden');
                 navPerf.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
                 navPerf.classList.remove('text-slate-500');
-                updateDashboard(false);
+                if (needsRedrawP1) {
+                    updateDashboard(true);
+                }
             } else if (page === 'analysis') {
                 pAnalysis.classList.remove('hidden');
                 navAnalysis.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
                 navAnalysis.classList.remove('text-slate-500');
-                updateDashboardP2(false);
+                if (needsRedrawP2) {
+                    updateDashboardP2(true);
+                }
             } else if (page === 'compare') {
                 pCompare.classList.remove('hidden');
                 navCompare.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
                 navCompare.classList.remove('text-slate-500');
-                updateDashboardP3(false);
+                if (needsRedrawP3) {
+                    updateDashboardP3(true);
+                }
             }
         }
 
@@ -1791,19 +1797,14 @@
 
         function updateDashboardP2(force = false) {
             if (!force && currentPage !== 'analysis') return;
-            if (force) {
-                needsRedrawP2 = true;
-            }
-            if (needsRedrawP2) {
-                applyFiltersP2();
-                computeAnalysisAggregates(filteredDataP2);
-                renderHazardousListP2();
-                renderCategoryPieChartP2();
-                renderLocationTreemapP2();
-                renderPlateStackedBarP2();
-                renderTableP2();
-                needsRedrawP2 = false;
-            }
+            applyFiltersP2();
+            computeAnalysisAggregates(filteredDataP2);
+            renderHazardousListP2();
+            renderCategoryPieChartP2();
+            renderLocationTreemapP2();
+            renderPlateStackedBarP2();
+            renderTableP2();
+            needsRedrawP2 = false;
         }
 
         function applyFiltersP3() {
@@ -1824,17 +1825,12 @@
 
         function updateDashboardP3(force = false) {
             if (!force && currentPage !== 'compare') return;
-            if (force) {
-                needsRedrawP3 = true;
-            }
-            if (needsRedrawP3) {
-                applyFiltersP3();
-                renderLocationMonthlyBarChartP3();
-                renderComparisonTableP3();
-                renderTop10TrendP3();
-                renderCategoryComparisonGridP3();
-                needsRedrawP3 = false;
-            }
+            applyFiltersP3();
+            renderLocationMonthlyBarChartP3();
+            renderComparisonTableP3();
+            renderTop10TrendP3();
+            renderCategoryComparisonGridP3();
+            needsRedrawP3 = false;
         }
 
         const locationColorScale = d3.scaleOrdinal(d3.schemeTableau10);
@@ -2868,20 +2864,15 @@ function updateStatistics() {
 
         function updateDashboard(force = false) {
             if (!force && currentPage !== 'performance') return;
-            if (force) {
-                needsRedrawP1 = true;
-            }
-            if (needsRedrawP1) {
-                applyFilters();
-                computePerformanceAggregates(filteredData);
-                updateStatistics();
-                renderStatusFunnel();
-                renderLocationChart();
-                renderTechnicianPieChart();
-                renderKPILeaderboard();
-                renderTable();
-                needsRedrawP1 = false;
-            }
+            applyFilters();
+            computePerformanceAggregates(filteredData);
+            updateStatistics();
+            renderStatusFunnel();
+            renderLocationChart();
+            renderTechnicianPieChart();
+            renderKPILeaderboard();
+            renderTable();
+            needsRedrawP1 = false;
         }
 
         const resizeObserver = new ResizeObserver(() => {
