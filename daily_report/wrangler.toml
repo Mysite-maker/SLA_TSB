@@ -1,0 +1,8 @@
+name = "app"
+main = "src/index.js"
+compatibility_date = "2026-06-02"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "daily-report"
+database_id = "8bce900c-383a-49a0-b541-39af467ea02c"
