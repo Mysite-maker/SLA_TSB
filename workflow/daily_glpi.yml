@@ -32,7 +32,7 @@ jobs:
           TARGET_ENTITY_ID: "15"
           OUTPUT_CSV_NAME: "glpi3.csv"
         run: |
-          python glpi_station.py
+          python glpi_station_github.py
 
       - name: Commit and Push glpi3.csv
         run: |
