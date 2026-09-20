@@ -1,4 +1,6 @@
 "ID";"Title";"Priority";"Requester - Requester";"Status";"Assigned To - Technician";"Category";"Locations";"Associated Elements";"Opening Date";"Last Update";"Closing Date";"Resolution Date";"SLA - SLA Time to Resolve";"Time to Resolve + Progress";"Time to resolve exceeded";""
+"19,053";"เครื่องแตะบัตรเสีย";"Medium";"";"New";"";"AVM";"แสมดำ";"16-6446 -";"20-09-2026 11:20";"20-09-2026 11:20";"";"";"ITS-Priority 2 (Medium)";"30-09-2026 08:30";"No";""
+"19,052";"AVM เสีย";"Medium";"";"New";"";"AVM";"เคหะบางพลี";"16-6797 -";"20-09-2026 03:30";"20-09-2026 03:30";"";"";"ITS-Priority 2 (Medium)";"30-09-2026 08:30";"No";""
 "19,051";"GPS ไม่ขึ้นโชว์";"Medium";"";"New";"";"GPS";"เคหะบางพลี";"16-6245 -";"19-09-2026 15:37";"19-09-2026 15:37";"";"";"ITS-Priority 2 (Medium)";"30-09-2026 08:30";"No";""
 "19,050";"AVM";"Medium";"";"New";"";"AVM";"เคหะบางพลี";"16-6236 -";"19-09-2026 15:29";"19-09-2026 15:30";"";"";"ITS-Priority 2 (Medium)";"30-09-2026 08:30";"No";""
 "19,049";"GPS ไม่มีการจับป้ายและไม่มีการบันทึกเวลา";"Medium";"";"New";"";"GPS";"ตลิ่งชัน";"16-7524 -";"19-09-2026 12:31";"19-09-2026 12:31";"";"";"ITS-Priority 2 (Medium)";"30-09-2026 08:30";"No";""
