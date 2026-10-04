@@ -1,4 +1,6 @@
 "ID";"Title";"Priority";"Requester - Requester";"Status";"Assigned To - Technician";"Category";"Locations";"Associated Elements";"Opening Date";"Last Update";"Closing Date";"Resolution Date";"SLA - SLA Time to Resolve";"Time to Resolve + Progress";"Time to resolve exceeded";""
+"19,144";"16-7529 CCTV ไม่สามารถดูย้อนหลังได้ HDD ผิดปกติ";"Medium";"";"New";"";"CCTV";"บึงกุ่ม";"16-7529 -";"04-10-2026 12:43";"04-10-2026 12:43";"";"";"ITS-Priority 2 (Medium)";"14-10-2026 08:30";"No";""
+"19,143";"MDVR สิริไม่ขานป้าย และ รูดใบขับขี่ไม่ได้";"Medium";"";"New";"";"MDVR";"รังสิต-บางพูน";"16-8390 -";"04-10-2026 07:59";"04-10-2026 07:59";"";"";"ITS-Priority 2 (Medium)";"14-10-2026 08:30";"No";""
 "19,142";"E60 ดับใช้งานไม่ได้";"Medium";"";"New";"";"E60";"ท่าเรือไทรม้า";"MSF30 -";"03-10-2026 16:46";"03-10-2026 16:46";"";"";"ITS-Priority 2 (Medium)";"14-10-2026 08:30";"No";""
 "19,141";"กล้องCCTVภายนอกฝั่งซ้ายภาพเบลอไม่ชัด";"Medium";"";"New";"";"CCTV";"ท่าเรือบุคคโล";"MSF32 -";"03-10-2026 14:57";"03-10-2026 14:57";"";"";"ITS-Priority 2 (Medium)";"14-10-2026 08:30";"No";""
 "19,140";"GPS offline อู่เลี่ยงเมืองนนท์";"Medium";"";"New";"";"GPS";"เลี่ยงเมืองนนท์";"16-7029 -";"03-10-2026 11:38";"03-10-2026 11:38";"";"";"ITS-Priority 2 (Medium)";"14-10-2026 08:30";"No";""
