@@ -1,4 +1,6 @@
 "ID";"Title";"Priority";"Requester - Requester";"Status";"Assigned To - Technician";"Category";"Locations";"Associated Elements";"Opening Date";"Last Update";"Closing Date";"Resolution Date";"SLA - SLA Time to Resolve";"Time to Resolve + Progress";"Time to resolve exceeded";""
+"19,205";"สัญญาน  ไม่ติด";"Medium";"";"New";"";"MDVR";"ท่าอิฐ";"16-7292 -";"18-10-2026 15:44";"18-10-2026 15:44";"";"";"ITS-Priority 2 (Medium)";"28-10-2026 08:30";"No";""
+"19,204";"GPS ไม่มีการจับป้ายและไม่มีการบันทึกเวลา";"Medium";"";"New";"";"GPS";"ตลิ่งชัน";"16-6852 -";"18-10-2026 07:11";"18-10-2026 07:11";"";"";"ITS-Priority 2 (Medium)";"28-10-2026 08:30";"No";""
 "19,203";"GPS ไม่มีการจับป้ายและไม่มีการบันทึกเวลา";"Medium";"";"New";"";"GPS";"ตลิ่งชัน";"16-7456 -";"17-10-2026 17:43";"17-10-2026 17:43";"";"";"ITS-Priority 2 (Medium)";"28-10-2026 08:30";"No";""
 "19,202";"หน้าจอ MDVR เสีย";"Medium";"";"New";"";"MDVR";"รังสิต-บางพูน";"16-8190 -";"16-10-2026 17:00";"16-10-2026 17:00";"";"";"ITS-Priority 2 (Medium)";"27-10-2026 17:00";"No";""
 "19,201";"หน้าจอ MDVR เสีย";"Medium";"";"New";"";"MDVR";"รังสิต-บางพูน";"16-8190 -";"16-10-2026 16:56";"16-10-2026 16:56";"";"";"ITS-Priority 2 (Medium)";"27-10-2026 16:56";"No";""
