@@ -1,4 +1,6 @@
 "ID";"Title";"Priority";"Requester - Requester";"Status";"Assigned To - Technician";"Category";"Locations";"Associated Elements";"Opening Date";"Last Update";"Closing Date";"Resolution Date";"SLA - SLA Time to Resolve";"Time to Resolve + Progress";"Time to resolve exceeded";""
+"19,223";"เปิดเคสเเจ้งซ่อมเครื่อง P3 หน้าจอแตก";"Medium";"";"New";"";"P3";"รังสิต 200 ปี";"16-6527 -";"23-10-2026 13:38";"23-10-2026 13:38";"";"";"ITS-Priority 2 (Medium)";"03-11-2026 13:38";"No";""
+"19,222";"MDVR";"Medium";"";"New";"";"MDVR";"สายใต้ใหม่";"16-8502 -";"23-10-2026 11:43";"23-10-2026 11:43";"";"";"ITS-Priority 2 (Medium)";"03-11-2026 11:43";"No";""
 "19,221";"GPS มี";"Medium";"";"New";"";"GPS";"เคหะธนบุรี";"16-7180 -";"22-10-2026 17:57";"22-10-2026 17:57";"";"";"ITS-Priority 2 (Medium)";"02-11-2026 17:57";"No";""
 "19,220";"MDVRแสดงผลไม่ครบ";"Medium";"";"Processing (assigned)";"Bunyapak(Moo) Nunart";"MDVR";"รามคำแหง 74";"16-7006 -";"22-10-2026 16:39";"22-10-2026 19:38";"";"";"ITS-Priority 2 (Medium)";"02-11-2026 16:39";"No";""
 "19,219";"กล้องประตูกลางเสียมองไม่เห็นผู้โดยสารขึ้น";"Medium";"";"New";"";"MDVR";"เคหะธนบุรี";"16-6340 -";"22-10-2026 11:41";"22-10-2026 11:41";"";"";"ITS-Priority 2 (Medium)";"02-11-2026 11:41";"No";""
