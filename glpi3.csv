@@ -1,4 +1,5 @@
 "ID";"Title";"Priority";"Requester - Requester";"Status";"Assigned To - Technician";"Category";"Locations";"Associated Elements";"Opening Date";"Last Update";"Closing Date";"Resolution Date";"SLA - SLA Time to Resolve";"Time to Resolve + Progress";"Time to resolve exceeded";""
+"19,261";"cctv ไม่ทำงาน";"Medium";"";"New";"";"CCTV";"กัลปพฤกษ์";"16-6835 -";"31-10-2026 08:55";"31-10-2026 08:55";"";"";"ITS-Priority 2 (Medium)";"11-11-2026 08:30";"No";""
 "19,260";"MDVR หน้าจอดับ";"Medium";"";"New";"";"MDVR";"บึงกุ่ม";"16-5862 -";"30-10-2026 16:50";"30-10-2026 16:51";"";"";"ITS-Priority 2 (Medium)";"10-11-2026 16:50";"No";""
 "19,259";"E60 เสีย";"Medium";"";"Processing (assigned)";"Phuri(อู๋) Komonprasert";"E60";"ศาลายา";"16-6648 -";"30-10-2026 11:52";"30-10-2026 13:30";"";"";"ITS-Priority 2 (Medium)";"10-11-2026 11:52";"No";""
 "19,258";"16-7690 อู่ปากเกร็ด gps รถกระโดด";"Medium";"";"Solved";"Phuri(อู๋) Komonprasert";"GPS";"ปากเกร็ด";"16-7690 -";"29-10-2026 14:58";"29-10-2026 17:31";"";"29-10-2026 17:31";"ITS-Priority 2 (Medium)";"09-11-2026 14:58";"No";""
