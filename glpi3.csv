@@ -1,4 +1,7 @@
 "ID";"Title";"Priority";"Requester - Requester";"Status";"Assigned To - Technician";"Category";"Locations";"Associated Elements";"Opening Date";"Last Update";"Closing Date";"Resolution Date";"SLA - SLA Time to Resolve";"Time to Resolve + Progress";"Time to resolve exceeded";""
+"19,264";"MDVR";"Medium";"";"New";"";"MDVR";"รังสิต-คลอง6";"16-8035 -";"01-11-2026 22:35";"01-11-2026 22:35";"";"";"ITS-Priority 2 (Medium)";"11-11-2026 08:30";"No";""
+"19,263";"E60";"Medium";"";"New";"";"E60";"สายใต้ใหม่";"16-6938 -";"01-11-2026 12:57";"01-11-2026 12:57";"";"";"ITS-Priority 2 (Medium)";"11-11-2026 08:30";"No";""
+"19,262";"MDVR ไม่ออนไลน์";"Medium";"";"New";"";"MDVR";"รังสิต-คลอง6";"16-6655 -";"01-11-2026 05:28";"01-11-2026 05:28";"";"";"ITS-Priority 2 (Medium)";"11-11-2026 08:30";"No";""
 "19,261";"cctv ไม่ทำงาน";"Medium";"";"New";"";"CCTV";"กัลปพฤกษ์";"16-6835 -";"31-10-2026 08:55";"31-10-2026 08:55";"";"";"ITS-Priority 2 (Medium)";"11-11-2026 08:30";"No";""
 "19,260";"MDVR หน้าจอดับ";"Medium";"";"New";"";"MDVR";"บึงกุ่ม";"16-5862 -";"30-10-2026 16:50";"30-10-2026 16:51";"";"";"ITS-Priority 2 (Medium)";"10-11-2026 16:50";"No";""
 "19,259";"E60 เสีย";"Medium";"";"Processing (assigned)";"Phuri(อู๋) Komonprasert";"E60";"ศาลายา";"16-6648 -";"30-10-2026 11:52";"30-10-2026 13:30";"";"";"ITS-Priority 2 (Medium)";"10-11-2026 11:52";"No";""
