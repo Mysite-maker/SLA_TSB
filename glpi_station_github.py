@@ -9,13 +9,13 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-# --- [ 1. ตั้งค่าการเชื่อมต่อ GLPI - ดึงค่าจาก Environment Variables เพื่อความปลอดภัย ] ---
+# --- [ 1. ตั้งค่าการเชื่อมต่อ GLPI ] ---
 GLPI_URL = os.environ.get("GLPI_URL", "https://asset.thaismilebus.com/glpi/apirest.php")
 APP_TOKEN = os.environ.get("GLPI_APP_TOKEN", "LhY5ETsrBhMdGsS2By2HhZpTxvVl8OTlxdFykvaK")
 USER_TOKEN = os.environ.get("GLPI_USER_TOKEN", "N6DexHruw4mGLh5PUTnCp24jJvXxPGDbseLz9hRx")
 TARGET_ENTITY_ID = int(os.environ.get("TARGET_ENTITY_ID", 15))  # ITS Station Request
 
-# --- [ 2. ตั้งค่าไฟล์ปลายทาง (กำหนดเป็น glpi3.csv ตามที่ท่านต้องการ) ] ---
+# --- [ 2. ตั้งค่าไฟล์ปลายทาง ] ---
 CSV_FILE_PATH = os.environ.get("OUTPUT_CSV_NAME", "glpi3.csv")
 
 HEADERS = {
@@ -84,7 +84,6 @@ _BR_MARKER = "\x00BR\x00"
 
 
 def build_http_session(headers):
-    """Connection pooling + retries for faster, more stable bulk export."""
     session = requests.Session()
     session.headers.update(headers)
     retry = Retry(
@@ -135,10 +134,8 @@ def clean_date_format(date_str):
 def format_dates_in_text(value):
     if not value:
         return ""
-
     def repl(match):
         return clean_date_format(match.group(0))
-
     return re.sub(r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}(?::\d{2})?", repl, str(value))
 
 
@@ -189,7 +186,6 @@ def cell(raw):
 
 
 def html_cell_to_text(fragment):
-    """Strip GLPI search HTML but keep <br> like the native CSV export."""
     if not fragment:
         return ""
     s = str(fragment)
@@ -202,7 +198,6 @@ def html_cell_to_text(fragment):
 
 
 def extract_user_id_from_html(fragment):
-    """Pull users_id from GLPI search HTML (giveItems) when raw search value is opaque."""
     if not fragment:
         return None
     s = str(fragment)
@@ -220,7 +215,6 @@ def extract_user_id_from_html(fragment):
 
 
 def format_user_for_csv(data):
-    """Match GLPI ticket export: 'First(nick) Last' when firstname/realname are set."""
     if not data:
         return ""
     fn = (data.get("firstname") or "").strip()
@@ -238,10 +232,6 @@ def format_user_for_csv(data):
 
 
 def normalize_associated_plate(text):
-    """
-    UI / giveItems strings add 'Serial Number:', '<br>', '//', etc.
-    Reference export (glpi.csv) keeps a short plate token: '16-7629 -'.
-    """
     if not text:
         return ""
     s = str(text)
@@ -366,11 +356,11 @@ def fetch_location_name(http, headers, cache, raw_value):
     return cache[lid]
 
 
-def build_search_params(offset, limit, with_progress):
+def build_search_params(with_progress):
+    # ตัด range ออกจาก Query Parameters (ใช้ส่งผ่าน HTTP Header แทน)
     params = {
         "sort": str(FIELD_ID),
         "order": "DESC",
-        "range": f"{offset}-{offset + limit - 1}",
         "expand_dropdowns": "true",
         "giveItems": "true",
         "is_deleted": "0",
@@ -449,10 +439,16 @@ def export_tickets(session_headers, with_progress, batch_size):
     try:
         with build_http_session(session_headers) as http:
             while True:
-                params = build_search_params(offset, batch_size, with_progress)
+                params = build_search_params(with_progress)
+                
+                # กำหนด Range ผ่าน HTTP Headers เพื่อให้ GLPI เลื่อนหน้าได้อย่างถูกต้อง
+                current_headers = dict(session_headers)
+                current_headers["Range"] = f"items={offset}-{offset + batch_size - 1}"
+
                 response = http.get(
                     f"{GLPI_URL}/search/Ticket",
                     params=params,
+                    headers=current_headers,
                     timeout=300,
                 )
                 response.raise_for_status()
@@ -532,7 +528,7 @@ def main():
     parser.add_argument(
         "--with-progress",
         action="store_true",
-        help="ใช้ฟิลด์ Time to Resolve + Progress แบบเต็ม (มี % ค้าง) แต่ช้ามาก",
+        help="ใช้ฟิลด์ Time to Resolve + Progress แบบเต็ม แต่ช้ามาก",
     )
     parser.add_argument(
         "--batch-size",
