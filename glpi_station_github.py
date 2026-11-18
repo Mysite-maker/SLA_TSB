@@ -356,11 +356,11 @@ def fetch_location_name(http, headers, cache, raw_value):
     return cache[lid]
 
 
-def build_search_params(with_progress):
-    # ตัด range ออกจาก Query Parameters (ใช้ส่งผ่าน HTTP Header แทน)
+def build_search_params(offset, limit, with_progress):
     params = {
         "sort": str(FIELD_ID),
         "order": "DESC",
+        "range": f"{offset}-{offset + limit - 1}",
         "expand_dropdowns": "true",
         "giveItems": "true",
         "is_deleted": "0",
@@ -439,16 +439,11 @@ def export_tickets(session_headers, with_progress, batch_size):
     try:
         with build_http_session(session_headers) as http:
             while True:
-                params = build_search_params(with_progress)
-                
-                # กำหนด Range ผ่าน HTTP Headers เพื่อให้ GLPI เลื่อนหน้าได้อย่างถูกต้อง
-                current_headers = dict(session_headers)
-                current_headers["Range"] = f"items={offset}-{offset + batch_size - 1}"
+                params = build_search_params(offset, batch_size, with_progress)
 
                 response = http.get(
                     f"{GLPI_URL}/search/Ticket",
                     params=params,
-                    headers=current_headers,
                     timeout=300,
                 )
                 response.raise_for_status()
