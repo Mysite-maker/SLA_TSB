@@ -1,4 +1,6 @@
 "ID";"Title";"Priority";"Requester - Requester";"Status";"Assigned To - Technician";"Category";"Locations";"Associated Elements";"Opening Date";"Last Update";"Closing Date";"Resolution Date";"SLA - SLA Time to Resolve";"Time to Resolve + Progress";"Time to resolve exceeded";""
+"19,383";"cctv ข้างเรือ ช่วงท้ายเรือซ้ายไม่ติด";"Medium";"";"New";"";"CCTV";"ท่าเรือบุคคโล";"MSF31 -";"22-11-2026 20:32";"22-11-2026 20:32";"";"";"ITS-Priority 2 (Medium)";"02-12-2026 08:30";"No";""
+"19,382";"16-6133 CCTV ไม่สามารถดูย้อนหลังได้ HDD ผิดปกติ";"Medium";"";"New";"";"CCTV";"เคหะบางพลี";"16-6133 -";"22-11-2026 18:55";"22-11-2026 18:55";"";"";"ITS-Priority 2 (Medium)";"02-12-2026 08:30";"No";""
 "19,381";"MDVRแสดงผลไม่เหมือนปกติ";"Medium";"";"New";"";"MDVR";"รามคำแหง 74";"16-8089 -";"21-11-2026 16:20";"21-11-2026 16:20";"";"";"ITS-Priority 2 (Medium)";"02-12-2026 08:30";"No";""
 "19,380";"กล้อง CCTV ไม่ติด 2 ตัว";"Medium";"";"Processing (assigned)";"Bunyapak(Moo) Nunart";"CCTV";"เคหะบางพลี";"16-6245 -";"20-11-2026 12:05";"20-11-2026 19:02";"";"";"ITS-Priority 2 (Medium)";"01-12-2026 12:05";"No";""
 "19,379";"ทะเบียน 16-6245 CH3 ไม่สามารถดูได้";"Medium";"";"Processing (assigned)";"Bunyapak(Moo) Nunart";"CCTV";"เคหะบางพลี";"16-6245 -";"20-11-2026 08:54";"20-11-2026 09:34";"";"";"ITS-Priority 2 (Medium)";"01-12-2026 08:54";"No";""
